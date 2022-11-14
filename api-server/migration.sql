@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS posts;
 
 CREATE TABLE users(
 	user_id SERIAL,
-  	username VARCHAR(30),
+  	username VARCHAR(30) UNIQUE,
   	password VARCHAR(30),
   	CONSTRAINT user_key PRIMARY KEY (user_id)
 );
