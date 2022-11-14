@@ -1,6 +1,8 @@
 console.log("Script is loaded");
 $('#loginModal').modal('show')
 
+load();
+
 $('#loginButton').on('click', (e)=>{            //login button listener
     let username = $('#username').val();
     let password = $('#password').val();
@@ -66,18 +68,41 @@ function createAccount(){
     .catch((error)=>{console.log(error)});
 }
 
-function renderPost(){
+function renderPost({post_id, username, user_id, content}){
+    let $card = $(`<div class='infoCard card' id='post${post_id}'></div>`);
+    let $cardBody = $(`<div class='card-body'></div>`);
 
+    $cardBody.append(`
+        <div class="row">
+            <h6>@${username}</h6>
+        </div>
+        <div class="row">
+            <p>${content}</p>
+        </div>
+    `);
+
+    $card.append($cardBody);
+
+    $('.main').append($card);
 }
 
 function load(){
-    // fetch(`https://api-server-m3lv.onrender.com/api/posts`, {
-    //     method:'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({'username': username, 'password': newPassword})
-    // })
+    fetch(`https://api-server-m3lv.onrender.com/api/posts`, {
+        method:'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(response=>response.json())
+    .then(data=>{
+        console.log(data)
+        for(let i = 0; i < data.length; i++){
+            
+            renderPost(data[i]);
+        }
+    })
+    .catch((error)=>{
+        console.log(error);
+    })
 }
 
 

@@ -2,6 +2,8 @@ body{
     background-color: lightblue;
 }
 
-#login{
-    border: solid;
+.card{
+    background-color: lightgreen;
+    margin:5px;
+    padding:5px;
 }
