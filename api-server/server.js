@@ -1,5 +1,6 @@
 const express = require('express');
 const {Pool} = require('pg');
+const cors = require('cors');
 
 const config = require('./config')[process.env.NODE_ENV||'dev'];
 
@@ -11,6 +12,7 @@ pool.connect();
 
 const app = express();
 const PORT = config.port;
+app.use(cors());
 app.use(express.json());
 
 
