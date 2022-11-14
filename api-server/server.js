@@ -71,7 +71,7 @@ app.post('/api/login/new', (req, res, next)=>{
 app.get('/api/posts', (req, res, next)=>{
     pool.query(`SELECT posts.post_id, posts.content, posts.user_id, users.username FROM posts JOIN users ON posts.user_id = users.user_id;`)
     .then((results)=>{
-        res.send(results.rows);
+        res.send(JSON.stringify(results.rows));
     })
     .catch((error)=>{
         next({status:500, message:"Server Error"});
