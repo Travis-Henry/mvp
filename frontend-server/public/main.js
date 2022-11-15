@@ -1,7 +1,13 @@
+var session_id;
+
 console.log("Script is loaded");
 $('#loginModal').modal('show')
 
 load();
+
+$('#sidebarCollapse').on('click', function () {
+    $('#sidebar').toggleClass('active');
+});
 
 $('#loginButton').on('click', (e)=>{            //login button listener
     let username = $('#username').val();
@@ -20,7 +26,7 @@ $('#loginButton').on('click', (e)=>{            //login button listener
             console.log(data);
             console.log("Change site here");
             $('#loginModal').modal('hide')
-        }else if(data === "Incorrect Password"){
+        }else if(response.status === 202){
             console.log(data);
         }else if(data === "User Not Found"){
             console.log(data);
