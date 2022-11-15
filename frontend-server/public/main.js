@@ -101,6 +101,7 @@ function renderPost({post_id, username, user_id, content}){
 }
 
 function load(){
+    $('.main').empty();
     fetch(`https://api-server-m3lv.onrender.com/api/posts`, {
         method:'GET',
         headers: {
@@ -109,7 +110,7 @@ function load(){
     }).then(response=>response.json())
     .then(data=>{
         console.log(data)
-        for(let i = 0; i < data.length; i++){
+        for(let i = data.length - 1; i >= 0; i--){
             
             renderPost(data[i]);
         }
@@ -130,7 +131,10 @@ function createPost(){
         },
         body: JSON.stringify({'user_id': user.user_id, 'content': postContent})
     }).then((response)=>{
-        if(response.status === 201){load()}
+        if(response.status === 201){
+            load();
+            $('#postModal').modal('hide');
+        }
     })
     .catch((error)=>{console.log(error)});
     
