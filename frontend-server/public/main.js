@@ -20,9 +20,15 @@ $('#loginButton').on('click', (e)=>{            //login button listener
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({'username': username, 'password': password})
-    }).then(response=>response.text())
-    .then((data)=>{
+    }).then((response)=>{
         if(response.status === 202){
+            response.json();
+        }else{
+            response.text();
+        }
+    })
+    .then((data)=>{
+        if(typeof data != "string"){
             console.log(data);
             console.log("Change site here");
             $('#loginModal').modal('hide')

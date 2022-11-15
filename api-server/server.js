@@ -26,7 +26,7 @@ app.post('/api/login', (req, res, next)=>{
     pool.query(`SELECT * FROM users WHERE username = '${username}'`)
     .then((results)=>{
         if(results.rows[0].password === password){
-            res.status(202).send(`${JSON.stringify(results.rows[0].username)}`);
+            res.status(202).send(`${JSON.stringify({"user_id":results.rows[0].user_id, "username": results.rows[0].username})}`);
         }else{
             next({status:401, message:"Incorrect Password"});
             return;
