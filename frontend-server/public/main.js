@@ -1,3 +1,4 @@
+
 var user;
 
 console.log("Script is loaded");
@@ -25,6 +26,7 @@ $('#loginButton').on('click', (e)=>{            //login button listener
             response.json().then(data=>{
                 user = data;
                 $('#userNameSpot').text(`@${user.username}`);
+                onLogin(); //change colors
                 $('#loginModal').modal('hide')
             });
         }else{
@@ -77,6 +79,7 @@ function createAccount(){
             response.json().then(data=>{
                 console.log("Logged in and new account");
                 user = data;
+                $('#userNameSpot').text(`@${user.username}`);
                 $('#createAccountModal').modal('hide')
             });
         }else{
@@ -91,7 +94,7 @@ function createAccount(){
 }
 
 function renderPost({post_id, username, user_id, content}){
-    let $card = $(`<div class='infoCard card' id='post${post_id}'></div>`);
+    let $card = $(`<div class='infoCard card user_id${user_id}' id='post${post_id}'></div>`);
     let $cardBody = $(`<div class='card-body'></div>`);
 
     $cardBody.append(`
@@ -102,6 +105,7 @@ function renderPost({post_id, username, user_id, content}){
             <p>${content}</p>
         </div>
     `);
+
 
     $card.append($cardBody);
 
@@ -146,6 +150,48 @@ function createPost(){
     })
     .catch((error)=>{console.log(error)});
     
+}
+
+function onLogin(){
+    const test = /user_id\d+/;      
+    
+    //this function will set all the comments to your color
+    let posts = $('.main').children()
+
+    for(let i = 0; i < posts.length; i++){
+        let classes = posts[i].className;
+        let id = classes.match(test)[0];
+        if(id === `user_id${user.user_id}`){
+            console.log(posts[i]);
+            posts[i].classList.add("userPost");
+
+            $(`#${posts[i].id}`).find('.card-body').append(`
+                <div class='row deleteRow'>
+                    <button class='btn deleteButton' id='delete${posts[i].id}'>Delete</button>
+                </div>
+            `).on('click', deletePost);
+
+        }
+    }
+}
+
+function deletePost(e){
+    let test = /\d+/;
+    let post_id = e.target.id.match(test)[0];
+    console.log(post_id)
+
+    fetch(`https://api-server-m3lv.onrender.com/api/posts/${post_id}`, {
+        method:'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then((response)=>{
+        
+    })
+    .catch((error)=>{
+        console.log(error);
+    });
 }
 
 

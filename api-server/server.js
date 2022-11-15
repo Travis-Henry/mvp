@@ -105,6 +105,18 @@ app.post('/api/posts/new', (req, res, next)=>{
     });
 });
 
+app.delete('/api/posts/:id', (req, res, next)=>{
+    let post_id = req.params.id;
+    pool.query(`DELETE FROM posts WHERE post_id = '${post_id}'`)
+    .then((results)=>{
+        res.send("Deleted");
+    })
+    .catch((error)=>{
+        next({status:400, message:"Bad Request"});
+        return;
+    });
+});
+
 
 app.use((err, req, res, next)=>{
     res.status(err.status).send(err.message);
