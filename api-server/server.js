@@ -79,6 +79,25 @@ app.get('/api/posts', (req, res, next)=>{
     });
 });
 
+app.post('/api/posts/new', (req, res, next)=>{
+    let user_id = req.body.user_id;
+    let content = req.body.content;
+
+    if(user_id === undefined || content === undefined){
+        next({status: 400, message:"Bad Request"});
+        return;
+    }
+
+    pool.query(`INSERT INTO posts(user_id, content) VALUES('${user_id}', '${content}')`)
+    .then(()=>{
+        res.status(201).send("New post created");
+    })
+    .catch((error)=>{
+        next({status: 500, message:"Server Error"});
+        return;
+    });
+});
+
 
 app.use((err, req, res, next)=>{
     res.status(err.status).send(err.message);

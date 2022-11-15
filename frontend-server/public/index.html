@@ -94,6 +94,30 @@
           </div>
         </div>
     </div>
+    <div id="postModal" class="modal" tabindex="-1" role="dialog" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Create new post</h5>
+            </div>
+
+            <div class="modal-body">
+              <div class="row">
+                <div class="col">
+                      <input id="postContent" type="text">
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="postClose" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="postButton">Post</button>
+            </div>
+
+          </div>
+        </div>
+    </div>
 
     <div class="wrapper">
         <nav id="sidebar">
@@ -109,7 +133,7 @@
                 <li>
                     <a href="#">My Posts</a>
                 </li>
-                <li>
+                <li id="createPostButton">
                     <a href="#">Create Post</a>
                 </li>
             </ul>

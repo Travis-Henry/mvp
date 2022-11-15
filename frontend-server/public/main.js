@@ -1,4 +1,4 @@
-var session_id;
+var user;
 
 console.log("Script is loaded");
 $('#loginModal').modal('show')
@@ -22,20 +22,18 @@ $('#loginButton').on('click', (e)=>{            //login button listener
         body: JSON.stringify({'username': username, 'password': password})
     }).then((response)=>{
         if(response.status === 202){
-            response.json();
+            response.json().then(data=>{
+                user = data;
+                $('#loginModal').modal('hide')
+            });
         }else{
-            response.text();
-        }
-    })
-    .then((data)=>{
-        if(typeof data != "string"){
-            console.log(data);
-            console.log("Change site here");
-            $('#loginModal').modal('hide')
-        }else if(data === "Incorrect Password"){
-            console.log(data);
-        }else if(data === "User Not Found"){
-            console.log(data);
+            response.text().then(data=>{
+                if(data === "Incorrect Password"){
+                    console.log(data);
+                }else if(data === "User Not Found"){
+                    console.log(data);
+                }
+            });
         }
     })
     .catch((error)=>{console.log(error)});
@@ -49,6 +47,10 @@ $('#backButton').on('click', (e)=>{            //opens login modal
     $('#loginModal').modal('show');
 });
 $('#createAccount').on('click', createAccount);   //listener when you push create account button
+$('#createPostButton').on('click', (e)=>{
+    $('#postModal').modal('show');
+});
+$('#postButton').on('click', createPost);
 
 function createAccount(){
     let username = $('#newUsername').val();
@@ -115,6 +117,23 @@ function load(){
     .catch((error)=>{
         console.log(error);
     })
+}
+
+function createPost(){
+    let postContent = $('#postContent').val();
+    console.log(postContent);
+
+    fetch(`https://api-server-m3lv.onrender.com/api/posts/new`, {
+        method:'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'user_id': user.user_id, 'content': postContent})
+    }).then((response)=>{
+        if(response.status === 201){load()}
+    })
+    .catch((error)=>{console.log(error)});
+    
 }
 
 
