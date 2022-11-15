@@ -24,6 +24,7 @@ $('#loginButton').on('click', (e)=>{            //login button listener
         if(response.status === 202){
             response.json().then(data=>{
                 user = data;
+                $('#userNameSpot').text(`@${user.username}`);
                 $('#loginModal').modal('hide')
             });
         }else{
@@ -71,13 +72,19 @@ function createAccount(){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({'username': username, 'password': newPassword})
-    }).then(response=>response.text())
-    .then((data)=>{
-        if(data === "New account created"){
-            console.log("Logged in and new account");
-            $('#createAccountModal').modal('hide')
-        }else if(data === "Username already exists"){
-            $('#createError').text(`This username is taken`);
+    }).then(response=>{
+        if(response.status === 201){
+            response.json().then(data=>{
+                console.log("Logged in and new account");
+                user = data;
+                $('#createAccountModal').modal('hide')
+            });
+        }else{
+            response.text().then(data=>{
+                if(data === "Username already exists"){
+                    $('#createError').text(`This username is taken`);
+                }
+            });
         }
     })
     .catch((error)=>{console.log(error)});

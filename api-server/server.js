@@ -51,7 +51,7 @@ app.post('/api/login/new', (req, res, next)=>{
         if(results.rows.length === 0){
             pool.query(`INSERT INTO users(username, password) VALUES ('${username}','${password}')`)
             .then(()=>{
-                res.status(201).send("New account created");
+                res.status(201).send(`${JSON.stringify({"user_id":results.rows[0].user_id, "username": results.rows[0].username})}`);
             })
             .catch((error)=>{
                 next({status:500, message:"Something went wrong"});
