@@ -51,6 +51,7 @@ $('#createPostButton').on('click', (e)=>{
     $('#postModal').modal('show');
 });
 $('#postButton').on('click', createPost);
+$('#homeButton').on('click', load);
 
 function createAccount(){
     let username = $('#newUsername').val();
