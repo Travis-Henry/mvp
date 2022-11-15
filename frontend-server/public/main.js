@@ -22,11 +22,11 @@ $('#loginButton').on('click', (e)=>{            //login button listener
         body: JSON.stringify({'username': username, 'password': password})
     }).then(response=>response.text())
     .then((data)=>{
-        if(data === "Logged In"){
+        if(response.status === 202){
             console.log(data);
             console.log("Change site here");
             $('#loginModal').modal('hide')
-        }else if(response.status === 202){
+        }else if(data === "Incorrect Password"){
             console.log(data);
         }else if(data === "User Not Found"){
             console.log(data);
