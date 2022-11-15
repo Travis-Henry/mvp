@@ -26,7 +26,7 @@ $('#loginButton').on('click', (e)=>{            //login button listener
             response.json().then(data=>{
                 user = data;
                 $('#userNameSpot').text(`@${user.username}`);
-                onLogin(); //change colors
+                load(); 
                 $('#loginModal').modal('hide')
             });
         }else{
@@ -80,6 +80,7 @@ function createAccount(){
                 console.log("Logged in and new account");
                 user = data;
                 $('#userNameSpot').text(`@${user.username}`);
+                load();
                 $('#createAccountModal').modal('hide')
             });
         }else{
@@ -105,6 +106,17 @@ function renderPost({post_id, username, user_id, content}){
             <p>${content}</p>
         </div>
     `);
+
+    if(user != undefined){
+        if(user.user_id === user_id){
+            $card.addClass('userPost');
+            $cardBody.append(`
+                <div class='row deleteRow'>
+                    <button class='btn deleteButton' id='delete${post_id}'>Delete</button>
+                </div>
+            `).on('click', deletePost);
+        }
+    }
 
 
     $card.append($cardBody);
@@ -152,29 +164,6 @@ function createPost(){
     
 }
 
-function onLogin(){
-    const test = /user_id\d+/;      
-    
-    //this function will set all the comments to your color
-    let posts = $('.main').children()
-
-    for(let i = 0; i < posts.length; i++){
-        let classes = posts[i].className;
-        let id = classes.match(test)[0];
-        if(id === `user_id${user.user_id}`){
-            console.log(posts[i]);
-            posts[i].classList.add("userPost");
-
-            $(`#${posts[i].id}`).find('.card-body').append(`
-                <div class='row deleteRow'>
-                    <button class='btn deleteButton' id='delete${posts[i].id}'>Delete</button>
-                </div>
-            `).on('click', deletePost);
-
-        }
-    }
-}
-
 function deletePost(e){
     let test = /\d+/;
     let post_id = e.target.id.match(test)[0];
@@ -187,7 +176,7 @@ function deletePost(e){
         }
     })
     .then((response)=>{
-        
+        load(user.user_id);
     })
     .catch((error)=>{
         console.log(error);
