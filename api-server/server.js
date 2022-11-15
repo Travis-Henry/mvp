@@ -51,9 +51,8 @@ app.post('/api/login/new', (req, res, next)=>{
         if(results.rows.length === 0){
             pool.query(`INSERT INTO users(username, password) VALUES ('${username}','${password}') `)  //RETURNING user_id INTO may be my anwser
             .then(()=>{
-                pool.query()
+                pool.query(`SELECT * FROM users WHERE username = '${username}'`)
                 .then((info)=>{
-                    console.log(data);//might have to do another query
                     res.status(201).send(`${JSON.stringify({"user_id":info.rows[0].user_id, "username": info.rows[0].username})}`);
                 })
                 .catch((error)=>{
